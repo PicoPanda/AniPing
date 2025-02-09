@@ -1,0 +1,5 @@
+__pycache__/
+anipingdev_venv/
+AniPing_Database.db
+queries.txt
+todo.md
