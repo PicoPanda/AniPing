@@ -217,15 +217,14 @@ def view_user_anime_list(user_id):
     else:
         return anime_list
     
-if __name__ == "__main__": # run for test unit
+if __name__ == "__main__": # Initialize the database for the first time
 
+    # Initialize the database
     database_initialization()
-    
-   # insert_user_to_db('louis','celiankouame@gmail.com', 123456)
 
-    insert_anime_to_db(clean_data(get_data(20)), user_id=1 ) # Naruto
-    insert_anime_to_db(clean_data(get_data(52991)), user_id=1 ) # SS no frieren
-    insert_anime_to_db(clean_data(get_data(9919)), user_id=1 ) # AO no Exorcist
-    insert_anime_to_db(clean_data(get_data(20)), user_id=1 ) # AO no Exorcist
-
-    print(view_user_anime_list(1)) # Louis
+    # Create the first user
+    print("Creating first user...")
+    name = input("Please enter your name : ")
+    email = input("Please enter your email : ")
+    password = input("Please enter your password : ")    
+    insert_user_to_db(name, email, password)
