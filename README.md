@@ -1,40 +1,66 @@
-# WORK IN PROGRESS - MAY NOT WORK AS INTENDED
+# 📺 Anime Notifications
 
-# AniPing 🎌
+A Python CLI application that tracks your favorite anime and sends notifications when new episodes are available.
 
-Welcome to **AniPing** – your one-stop solution to track anime information and receive delightful notifications! 
+## ✨ Features
 
-## Overview 🚀
-AniPing is designed to fetch and manage anime details from the Jikan API while keeping you updated with the latest notifications on macOS. Whether you're an anime enthusiast or just curious, AniPing offers an intuitive interface and powerful features to explore.
+- 🎯 Track anime from MyAnimeList using the Jikan API
+- 🔔 Get notifications for new episode releases
+- 📝 Manage your watch list through a simple CLI interface
+- 💾 SQLite database for local storage
+- 🖥️ macOS notifications support
 
-## Features ✨
-- **Real-time notifications**: Get macOS notifications for updates.
-- **Comprehensive anime details**: Retrieve detailed anime information using the Jikan API.
-- **User-friendly CLI menus**: Easily navigate through the application.
-- **Database management**: Store and manage your favorite anime with SQLite.
+## 🚀 Installation
 
-## Installation & Setup 🔧
-1. Clone the repository.
-2. Install the Python dependencies using:
-   ```
-   pip install -r requirement.txt
-   ```
-3. Run the database initialization by executing `db_operations.py`.
-4. Start using the CLI by running `menus.py` or directly playing with the features.
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/anime-notifications.git
+cd anime-notifications
+```
 
-## Usage 📖
-- Test notifications with `notifications.py`.
-- Fetch and clean anime data using `api_request.py`.
-- Manage your preferences and anime list using the various menus provided.
+2. Install required packages:
+```bash
+pip install -r requirements.txt
+```
 
-## Contributing 🤝
-Contributions are welcome! Please fork the repository and submit a pull request with your changes. For any suggestions or improvements, feel free to open an issue.
+3. Initialize the database:
+```bash
+python db_init.py
+```
 
-## License ⚖️
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## 📖 Usage
 
----
+1. Start the application:
+```bash
+python main.py
+```
 
-Enjoy your journey with AniPing! If you have any questions, don't hesitate to reach out.
+2. Available Commands:
+```
+➕ add <anime_id>  - Add an anime to your watch list
+➖ remove <anime_id>  - Remove an anime from your watch list
+📋 list  - Show your current watch list
+🔄 check  - Check for new episodes manually
+❌ exit  - Exit the application
+```
 
-Happy coding! 😃
+## ⚙️ Configuration
+
+The application stores its data in:
+- 📁 `database.db`: SQLite database file
+- 🛠️ Configuration is handled through the CLI interface
+
+## 💻 Development
+
+- 🐍 Python 3.8+
+- 🌐 Uses Jikan API v4
+- 🗄️ SQLite3 for data storage
+- 🍎 Built for macOS notifications
+
+## 🤝 Contributing
+
+1. 🔱 Fork the repository
+2. 🌿 Create your feature branch
+3. ✍️ Commit your changes
+4. 🚀 Push to the branch
+5. 📬 Create a new Pull Request

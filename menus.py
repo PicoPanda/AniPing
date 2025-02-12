@@ -1,109 +1,157 @@
-"""
-menus.py
---------
-Implements the CLI menus for the AniPing application.
-Menus included:
- - Main Menu
- - User creation Menu
- - User login Menu
- - Add Anime Menu
- - Update Anime Menu
- - View Anime List Menu
- - Settings Menu (to change name / address / password / notifications)
- - Future Enhancements Menu (to suggest and list future enhancements)
- - About Menu
- - Help Menu
- - Exit Menu
-"""
+'''
+This file contains the menus for the cli application.
 
-def user_creation_menu():
-    print("\n--- User Creation Menu ---")
-    # ...logic for creating a user...
-    input("Press Enter to return to Main Menu.")
+1. Create an account
+2. Login
+3. View top 5 anime of the week/month
+4. 
+'''
 
-def user_login_menu():
-    print("\n--- User Login Menu ---")
-    # ...logic for user login...
-    input("Press Enter to return to Main Menu.")
+def clear_screen():
+    print("\033c", end="")
 
-def add_anime_menu():
-    print("\n--- Add Anime Menu ---")
-    # ...logic to add anime...
-    input("Press Enter to return to Main Menu.")
-
-def update_anime_menu():
-    print("\n--- Update Anime Menu ---")
-    # ...logic to update anime...
-    input("Press Enter to return to Main Menu.")
-
-def view_anime_list_menu():
-    print("\n--- View Anime List Menu ---")
-    # ...logic to display user's anime list...
-    input("Press Enter to return to Main Menu.")
-
-def settings_menu():
-    print("\n--- Settings Menu ---")
-    # ...logic to change user settings (name, address, password, notifications)...
-    input("Press Enter to return to Main Menu.")
-
-def future_enhancements_menu():
-    print("\n--- Future Enhancements Menu ---")
-    # ...logic to suggest future enhancements and list them...
-    input("Press Enter to return to Main Menu.")
-
-def about_menu():
-    print("\n--- About Menu ---")
-    # ...display about information...
-    input("Press Enter to return to Main Menu.")
-
-def help_menu():
-    print("\n--- Help Menu ---")
-    # ...display help and usage instructions...
-    input("Press Enter to return to Main Menu.")
-
-def exit_menu():
-    print("\nExiting AniPing2. Goodbye!")
-    exit(0)
+def header(menu_name=str):
+    clear_screen()
+    print("=" * 20)
+    print(menu_name)
+    print("=" * 20)
 
 def main_menu():
+    clear_screen()
+    header("👋 Welcome to AniPing!")
+
+    print("1. 📝 Create an account")
+    print("2. 🔑 Login")
+    print("3. 📊 View top 5 anime of the week/month")
+    print("4. 🚪 Exit")
+    print("=" * 20)
+    print()
+
+    choice = input("Enter your choice: ")
+    print(choice)
+
+def create_account_menu(username, email, password):
+    clear_screen()
+    header("📝 Create an account")
+
     while True:
-        print("\n=== Main Menu ===")
-        print("1. User Creation")
-        print("2. User Login")
-        print("3. Add Anime")
-        print("4. Update Anime")
-        print("5. View Anime List")
-        print("6. Settings")
-        print("7. Future Enhancements")
-        print("8. About")
-        print("9. Help")
-        print("0. Exit")
-        
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            user_creation_menu()
-        elif choice == "2":
-            user_login_menu()
-        elif choice == "3":
-            add_anime_menu()
-        elif choice == "4":
-            update_anime_menu()
-        elif choice == "5":
-            view_anime_list_menu()
-        elif choice == "6":
-            settings_menu()
-        elif choice == "7":
-            future_enhancements_menu()
-        elif choice == "8":
-            about_menu()
-        elif choice == "9":
-            help_menu()
-        elif choice == "0":
-            exit_menu()
+        username = input("Enter your username: ")
+        if username.isalnum():
+            break
         else:
-            print("Invalid choice. Please try again.")
+            print("Username should only contain letters and numbers. Please try again.")
 
+    while True:
+        email = input("Enter your email: ")
+        if "@" in email and "." in email:
+            break
+        else:
+            print("Please enter a valid email address.\n")
 
+    while True:
+        password = input("Enter your password: ")
+        if len(password) >= 6:
+            break
+        else:
+            print("Password should be at least 6 characters long. Please try again.")
 
-if __name__ == "__main__":
-    main_menu()
+    print()
+
+    print("✅ Account created successfully!\n")
+    print("🔑 Please login to continue.")
+    print("↩️ Press 'Enter' return to the main menu.")
+    print("=" * 20)
+    print(username, email, password)
+
+    return username, email, password
+
+def login_menu():
+    header("🔑 Login")
+
+    while True:
+        email = input("Enter your email: ")
+        if "@" in email and "." in email:
+            break
+        else:
+            print("Please enter a valid email address.\n")
+
+    while True:
+        password = input("Enter your password: ")
+        if len(password) >= 6:
+            break
+        else:
+            print("Password should be at least 6 characters long. Please try again.")
+
+    print("🔄 Trying to login...")
+    print("⏳ Please wait...\n")
+
+    print("=" * 20)
+    print(email, password)
+
+    return email, password
+
+def login_failure_menu():
+    header("❌ Login failed!")
+
+    print("1. 🔄 Try again")
+    print("2. ↩️ Go back")
+    print("=" * 20)
+    print()
+
+    choice = input("Enter your choice: ")
+    print(choice)
+
+def login_success_menu():
+    header("✅ Login successful!")
+
+    print("1. ➕ Add anime to watch list")
+    print("2. 📋 View watch list")
+    print("3. ✏️ Edit watch list")
+    print("4. 🚪 Exit (logout)")
+    print("=" * 20)
+    print()
+
+    choice = input("Enter your choice: ")
+    print(choice)
+
+def add_anime_menu():
+    header("Add anime to watch list")
+
+    user_mal_id = input("Enter the ID of the anime you want to add: ")
+
+    print()
+    print("=" * 20)
+    print(user_mal_id)
+
+    return user_mal_id
+
+def view_user_watch_list_menu():
+    header("View watch list")
+
+    print("1. View all anime in watch list")
+    print("2. View anime by genre")
+    print("3. Go back")
+    print("=" * 20)
+    print()
+
+    choice = input("Enter your choice: ")
+    print(choice)
+
+def view_top_anime_menu():
+    header("Top 5 anime of the week/month")
+
+    print("1. View top 5 anime of the week")
+    print("2. View top 5 anime of the month")
+    print("3. Go back")
+    print("=" * 20)
+    print()
+
+    choice = input("Enter your choice: ")
+    print(choice)
+
+def quit_menu():
+    print("🙏 Thank you for using AniPing!")
+    print("👋 Goodbye!")
+
+login_menu()
+
