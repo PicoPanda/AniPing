@@ -1,3 +1,5 @@
+# WARNING - PROJECT STILL IN WORK (WIP) // FILE ON PUBLIC FOR SHARING PURPOSES, USE AT YOUR OWN RISK
+
 # 📺 Anime Notifications
 
 A Python CLI application that tracks your favorite anime and sends notifications when new episodes are available.
