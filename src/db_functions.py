@@ -12,14 +12,12 @@ The functions in this file are used to:
 
 import sqlite3
 import os
-import json
-import time
-from datetime import datetime
 from api_functions import *
 
+# ✅
 def add_new_user_to_database(username, email, password):
     """
-    Add a new user to the database.
+    Add a new user to the database. Basically storing MAL account details.
     :param username: The username of the new user
     :param email: The email of the new user
     :param password: The password of the new user
@@ -44,6 +42,7 @@ def add_new_user_to_database(username, email, password):
 
     return True if user else False
 
+# ✅
 def login_user(email, password):
     """
     Login an existing user.
@@ -86,94 +85,7 @@ def login_user(email, password):
 
     return True and user_email
 
-def parse_and_insert_json(json_data):
-    """
-    Parse JSON data and insert it into the database.
-    
-    Args:
-        json_data (dict): The JSON data to be inserted.
-        db_path (str, optional): The path to the SQLite database. Defaults to "database.db".
-        user_email (str, optional): The email of the user associated with this data. Defaults to None.
-        
-    Returns:
-        bool: True if the operation was successful, False otherwise.
-    """
-    # Connect to the database
-    conn = sqlite3.connect("database.db")
-    cur = conn.cursor()
-
-    json_data = json_data.get("data", {})
-    
-    try:
-        # Assuming json_data contains anime information
-        # Let's extract the required fields for the anime_info table
-        mal_id = json_data.get("mal_id")
-        url = json_data.get("url")
-        image_url = json_data.get("image_url")
-        small_image_url = json_data.get("small_image_url")
-        large_image_url = json_data.get("large_image_url")
-        title = json_data.get("title")
-        title_english = json_data.get("title_english")
-        title_japanese = json_data.get("title_japanese")
-        title_synonyms = json.dumps(json_data.get("title_synonyms", []))
-        episodes = json_data.get("episodes")
-        status = json_data.get("status")
-        airing = 1 if json_data.get("airing") else 0
-        aired = json_data.get("aired")
-        aired_from = aired.get("from", "N/A")
-        aired_to = aired.get("to", "N/A")
-        aired_string = aired.get("string", "N/A")
-        duration = json_data.get("duration")
-        rating = json_data.get("rating")
-        score = json_data.get("score", 0.0)
-        scored_by = json_data.get("scored_by", 0)
-        synopsis = json_data.get("synopsis")
-        background = json_data.get("background")
-        season = json_data.get("season")
-        year = json_data.get("year")
-        broadcast = json_data.get("broadcast")
-        broadcast_day = broadcast.get("day")
-        broadcast_time = broadcast.get("time")
-        broadcast_timezone = broadcast.get("timezone")
-        broadcast_string = broadcast.get("string")
-        
-        # Studios, genres, and streaming are lists of dictionaries
-        studios = json.dumps(json_data.get("studios", []))
-        genres = json.dumps(json_data.get("genres", []))
-        streaming = json.dumps(json_data.get("streaming", []))
-        
-        # Insert into anime_info table
-        cur.execute("""
-            INSERT INTO anime_info (
-                mal_id, url, image_url, small_image_url, large_image_url,
-                title, title_english, title_japanese, title_synonyms,
-                episodes, status, airing, aired_from, aired_to, aired_string,
-                duration, rating, score, scored_by, synopsis, background,
-                season, year, broadcast_day, broadcast_time, broadcast_timezone,
-                broadcast_string, studios, genres, streaming
-            ) VALUES (?, ?, ?, ?, ?,
-                      ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                      ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (mal_id, url, image_url, small_image_url, large_image_url,
-              title, title_english, title_japanese, title_synonyms,
-              episodes, status, airing, aired_from, aired_to, aired_string,
-              duration, rating, score, scored_by, synopsis, background,
-              season, year, broadcast_day, broadcast_time, broadcast_timezone,
-              broadcast_string, studios, genres, streaming))
-        conn.commit()
-
-        print("✅ Data inserted successfully!")
-
-    except sqlite3.Error as e:
-        print(f"❌ Error inserting data for anime {mal_id}: {e}\n")
-        conn.rollback()
-        return False
-    finally:
-        conn.close()
-        
-        
-        return True
-
+# ✅
 def add_anime_to_watch_list(user_id:int, mal_id:int, episodes_watched:int, status:str):
     """
     Add an anime to the user's watch list.
@@ -210,6 +122,7 @@ def add_anime_to_watch_list(user_id:int, mal_id:int, episodes_watched:int, statu
 
     return True
 
+# ✅
 def update_user_watch_list(user_id:int, mal_id:int, episodes_watched:int, status:str):
     """
     Update the user's watch list with the episodes, and status.
@@ -250,28 +163,95 @@ def update_user_watch_list(user_id:int, mal_id:int, episodes_watched:int, status
 
     return True
 
+# ✅
+def init(db_path="database.db"):
+    """
+    Initialize the database:
+    1. Check if the database already exists.
+    2. Create the database and necessary tables if it does not exist.
+    3. If the database exists, print a message prompting the user if they want to delete the database.
+    4. Create the user_watch_list table that tracks the episodes watched by the user.
+    """
 
-# add_anime_to_watch_list(1, 5114, 2, "Watching")
-# update_user_watch_list(1, 52991, 10, "Watching")
+    print("Initializing the database...")
+    print(f"Database path: '{db_path}'\n")
 
-"""
-add_new_user_to_database("celian", "test@email.com", "testpassword")
-add_new_user_to_database("louis", "test@email.com", "testpassword")
-add_new_user_to_database("louis", "test1@email.com", "testpassword")
+    db_exists = os.path.exists(db_path)
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+    
+    if not db_exists:
+        # Create anime_info table that stores the information of the anime
+        cur.execute("""
+    CREATE TABLE IF NOT EXISTS anime_info (
+        mal_id INTEGER PRIMARY KEY UNIQUE,
+        url TEXT,
+        image_url TEXT,
+        small_image_url TEXT,
+        large_image_url TEXT,
+        title TEXT,
+        title_english TEXT,
+        title_japanese TEXT,
+        title_synonyms TEXT, -- JSON encoded list
+        episodes INTEGER,
+        status TEXT,
+        airing INTEGER, -- use 0/1 for False/True
+        aired_from TEXT,
+        aired_to TEXT,
+        aired_string TEXT,
+        duration TEXT,
+        rating TEXT,
+        score REAL,
+        scored_by INTEGER,
+        synopsis TEXT,
+        background TEXT,
+        season TEXT,
+        year INTEGER,
+        broadcast_day TEXT,
+        broadcast_time TEXT,
+        broadcast_timezone TEXT,
+        broadcast_string TEXT,
+        studios TEXT,        -- JSON encoded list of dicts
+        genres TEXT,         -- JSON encoded list of dicts
+        streaming TEXT,       -- JSON encoded list of dicts
+        watching_users TEXT  -- JSON encoded list of dicts
+    )
+""")
+        # Create user_data table that stores the user information
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS user_data (
+                user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT,
+                email TEXT UNIQUE,
+                password TEXT
+            )
+        """)
+        conn.commit()
+        print("Database and tables created successfully.")
 
-json_data = get_anime_info(52991) # Sousou no Frieren
-parse_and_insert_json(json_data)
-
-json_data = get_anime_info(5114) # FMA: Brotherhood
-parse_and_insert_json(json_data)
-
-json_data = get_anime_info(58572) # Shangri La Frontier
-parse_and_insert_json(json_data)
-add_new_user_to_database("celian", "test@email.com", "testpassword")
-add_new_user_to_database("louis", "test@email.com", "testpassword")
-add_new_user_to_database("louis", "test1@email.com", "testpassword")
-
-
-# login_user("test@email.com", "testpassword")
-# print(json_data)
-"""
+        # Create user_watch_list table that tracks the episodes watched by the user
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS user_watch_list (
+                user_id INTEGER,
+                mal_id INTEGER,
+                episodes_watched INTEGER DEFAULT 0,
+                status TEXT DEFAULT "Watching",
+                FOREIGN KEY (user_id) REFERENCES user_data(user_id),
+                FOREIGN KEY (mal_id) REFERENCES anime_info(mal_id),
+                PRIMARY KEY (user_id, mal_id)
+            )
+        """)
+    else:
+        print("Database already exists.")
+        delete = input("Do you want to delete the existing database and create a new one? (y/n) : ").lower()
+        if delete == 'y':
+            print("Deleting the existing database...")
+            conn.close()
+            os.remove(db_path)
+            init_database()
+            return
+        else:
+            print("Exiting without deleting the database.")
+            return
+    
+    conn.close()

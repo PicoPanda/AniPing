@@ -1,4 +1,6 @@
+# Dependencies for AniPing
 requests>=2.31.0
+click>=8.1.3
 sqlite3
 schedule>=1.2.0
 mac-notifications>=0.2.0
